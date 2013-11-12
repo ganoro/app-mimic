@@ -19,6 +19,9 @@ Parse.initialize("mMS3oCiZOHC15v8OGTidsRgHI0idYut39QKrIhIH", "93nPWcPsKnnoxQqVxm
  * under the License.
  */
 var app = {
+
+    state : 0,
+
     // Application Constructor
     initialize: function() {
         this.bindEvents();
@@ -32,6 +35,8 @@ var app = {
         document.addEventListener('pause', this.onDevicePause, false);
     },
     
+    onDevicePause : function() {
+    },
     
     
     // deviceready Event Handler
@@ -40,23 +45,74 @@ var app = {
     // function, we must explicity call 'app.receivedEvent(...);'
     onDeviceReady: function() {
         app.receivedEvent('deviceready');
+        app.pushNot();
     },
     
     // Update DOM on a Received Event
     receivedEvent: function(id) {
+        $("#anim2").hide();
+        $("#clicking").hide();
 
-        $("#textfield").bind('focusin', function() {
-            $(".app").css("background-image", "url(img/screen3.png)");  
+        $(".app").bind('touchstart', this.blinks.bind(this));
+        $(".app").bind('touchend', this.switchPage.bind(this));
+
+        var that = this;
+        $(".app2").bind('touchend', function() {
+            setTimeout(function() {
+                $("#anim1").transit({ y : '-210px'}, 200);
+                $("#anim2").show('slow');
+                $("#anim2").transit({ y : '-120px'}, 100);
+            }, 100);
+            $("#textfield").focus();
+            window.scrollTo( 0, 0);
+            $(".app2").bind('touchend', that.switchPage.bind(that));
+
         });
+        
+        $("#textfield").keyup(function(event){
+          setTimeout(function(){
+                window.scrollTo(100, 0);
+            }, 0);
+        });
+    },
 
-        $("#textfield").bind('focusout', function() {
+    switchPage : function() {
+        document.activeElement.blur();
+        $("#textfield").blur();
+        if (this.state == 0) {
+            $(".app").transition({ x: '-90px' }, 400, 'easeOutCubic');
+            $(".app2").transition({ x: '-320px' }, 400, 'easeOutCubic');
+            document.activeElement.blur();
+            $("#textfield").blur();
+
+            $(".app").unbind('touchend');
+
+            this.state = 1;       
+        } else {
             $(".app").css("background-image", "url(img/screen4.png)");  
-        });
+            $("#wrapper").css({'position':'absolute', 'left' :'0px', 'top':'520px'})
+            $("#textfield").val('');
+            this.state = 0;
+        }
+    },
 
-        $(".app").bind('touchend', function() {
-            $(this).css("background-image", "url(img/screen2.png)");  
-       });
-        
-        
+    blinks : function() {
+        $("#clicking").fadeIn(50);
+    },
+
+    pushNot : function() {
+
+        setTimeout(function() {
+            Parse.Push.send({
+              where: new Parse.Query(Parse.Installation),
+              data: { 
+                alert : "Rachel Green: Great results from yesterday's campaign!",
+                badge : 1
+               }
+            }, {
+              success: function() {  },
+              error: function() {  }
+            });
+        }, 4000);
     }
 };

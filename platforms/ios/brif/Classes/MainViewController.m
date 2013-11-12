@@ -27,6 +27,7 @@
 
 #import "MainViewController.h"
 
+
 @implementation MainViewController
 
 - (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil
@@ -71,11 +72,17 @@
     [super viewWillAppear:animated];
 }
 
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self setNeedsStatusBarAppearanceUpdate];
     // Do any additional setup after loading the view from its nib.
 }
+    
+    -(UIStatusBarStyle)preferredStatusBarStyle{
+        return UIStatusBarStyleLightContent;
+    }
 
 - (void)viewDidUnload
 {
@@ -89,6 +96,7 @@
     // Return YES for supported orientations
     return [super shouldAutorotateToInterfaceOrientation:interfaceOrientation];
 }
+
 
 /* Comment out the block below to over-ride */
 

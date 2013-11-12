@@ -20,17 +20,20 @@
     {
       "idiom" : "iphone",
       "scale" : "1x",
+      "filename" : "icons_mall.png",
       "size" : "29x29"
     },
     {
       "idiom" : "iphone",
       "scale" : "2x",
+      "filename" : "icons_mall@2x.png",
       "size" : "29x29"
     },
     {
       "idiom" : "iphone",
       "scale" : "2x",
-      "size" : "40x40"
+      "size" : "40x40",
+      "filename" : "icon@2x40.png"
     }
   ],
   "info" : {
